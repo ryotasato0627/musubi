@@ -19,7 +19,7 @@ model: claude-opus-5-5
 
 呼び出し元（`dev-cycle` Skill）がモードと作業ディレクトリを指定する。指定が無ければ開発モード。
 
-* **開発モード**：`task.md`（計画の該当 PR を写したもの）を入力に、下の Workflow どおり実装する。**計画の範囲（やること）だけを実装し、「やらないこと」には手を出さない。** 見込み行数を大きく超えそうなら、範囲を広げずに Notes に書く。Output を `dev-report.md` に書く。`task.md` の「やらないこと」には手を出さない
+* **開発モード**：`task.md`（計画の該当 PR を写したもの）を入力に、下の Workflow どおり実装する。**計画の範囲（やること）だけを実装し、「やらないこと」には手を出さない。** 見込み行数を大きく超えそうなら、範囲を広げずに Notes に書く。Output を `dev-report.md` に書く
 * **修正モード**：`ac.md` の **未達の条件だけ** を満たすように直す。根拠欄の原因と方針を読み、受け入れ条件に無い変更はしない。Workflow の 4（Plan）は省略してよい。Output を `fix-report-<N>.md` に書き、どの条件をどう直したかを条件 ID ごとに記載する
 
 どちらのモードでも、ユーザーに確認せずに進める。要件・設計の変更、決定済み事項に反する選択、複数案からの設計判断が必要になった場合は、その部分を実装せず、Output の Notes に「人間の判断が必要」として選択肢と推奨を書いて終える。
@@ -32,7 +32,7 @@ model: claude-opus-5-5
 
 * ユーザーの要求、Issue、対応する要件 ID（`F-xx` / `NFR-xx` / `E/W/Ixxx`）
 * リリース計画（requirements.md 9 章）のどの段階の作業か。後の段階の機能を先回りして作らない
-* 曖昧な場合は、コードを書く前に不足情報を特定して確認する
+* 曖昧な点は推測で埋めない。dev-cycle から呼ばれた場合は確認せず、その部分を実装せずに Notes に選択肢と推奨を書く（単独で呼ばれた場合はユーザーに確認してよい）
 
 ### 2. ルールと仕様を確認
 
@@ -56,7 +56,7 @@ docs/spec/design.md                        # レイヤー構成・CLI・デー�
 ### 4. Implementation Plan
 
 変更前に、変更内容・変更ファイル・理由・影響範囲・必要なテスト（`testdata/` を含む）を整理して示す。
-複数コミットになる場合は `commit-strategy` Skill、複数 PR になる場合は `pr-strategy` Skill に従う。
+複数コミットになる場合は `commit-strategy` Skill に従う。PR の範囲は `task.md`（計画）で決まっているので広げない。
 
 ### 5. Implementation
 
@@ -69,12 +69,7 @@ docs/spec/design.md                        # レイヤー構成・CLI・デー�
 
 ### 6. Testing
 
-```bash
-go build ./...
-go vet ./...
-golangci-lint run
-go test ./...
-```
+`.claude/rules/git-workflow.md` の「検証コマンド」（build・vet・golangci-lint・test）をすべて実行する。
 
 ### 7. Self Review
 
@@ -111,7 +106,7 @@ go test ./...
 
 ## Restrictions
 
-* 要件・設計を勝手に変更しない。不明な仕様を推測して実装しない（確認する）
+* 要件・設計を勝手に変更しない。不明な仕様を推測して実装しない（扱いは Workflow 1 のとおり）
 * design.md 12 章・承認済みの ADR（`docs/adr/`）の決定済み事項に反する実装をしない
 * CLI のオプション・終了コード・JSON スキーマ・依存ライブラリを不要に変えない
 * `main` / `develop` に直接コミットしない

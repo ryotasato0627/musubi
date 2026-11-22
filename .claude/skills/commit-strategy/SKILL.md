@@ -2,7 +2,7 @@
 name: commit-strategy
 description: 実装を開始する前のコミット計画と、コミットの作成・分割時に使う。複数ファイルにまたがる変更を行うときは、実装前に必ず参照する。
 metadata:
-  deps.related: "pr-strategy"
+  deps.related: "release-plan"
 ---
 
 # Commit Strategy
@@ -27,7 +27,7 @@ AI が大量のコードを生成した場合でも、人間が変更内容を�
 
 実装をすべて終えてから、まとめて 1 つのコミットにしない。
 
-変更が複数の PR に分かれる場合は、先に `pr-strategy` で PR 計画を作成し、PR ごとにコミット計画を作成する。
+PR の範囲は計画（`release-plan` Skill、`docs/plans/<版>.md`）で決まっている。コミット計画はその PR の範囲の中で作る。
 
 ## Rules
 
@@ -64,16 +64,7 @@ AI が大量のコードを生成した場合でも、人間が変更内容を�
 
 ### 4. 各コミットでビルドとテストが通る状態を保つ
 
-どのコミットをチェックアウトしても、次が通る状態にする。
-
-```bash
-go build ./...
-go vet ./...
-golangci-lint run
-go test ./...
-```
-
-`golangci-lint` は必須（`.claude/rules/git-workflow.md`）。`web/` を変更した場合は、そのパッケージのビルドとテストも実行する。
+どのコミットをチェックアウトしても、`.claude/rules/git-workflow.md` の「検証コマンド」（build・vet・golangci-lint・test）が通る状態にする。`web/` を変更した場合は、そのパッケージのビルドとテストも実行する。
 
 分割によって途中のコミットでビルドが壊れる場合は、分割の単位か順序を見直す。
 

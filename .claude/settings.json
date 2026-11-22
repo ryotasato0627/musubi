@@ -13,6 +13,9 @@
       "Edit(go.mod)",
       "Edit(go.sum)",
       "Edit(.golangci.yml)",
+      "Edit(.github/**)",
+      "Edit(README.md)",
+      "Edit(CLAUDE.md)",
       "Read(.env.sample)",
       "Edit(.env.sample)",
 

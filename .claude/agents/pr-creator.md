@@ -70,18 +70,13 @@ git merge-tree --write-tree origin/<base> HEAD
 
 ### 5. 検証を実行
 
-```bash
-go build ./...
-go vet ./...
-golangci-lint run
-go test ./...
-```
+`.claude/rules/git-workflow.md` の「検証コマンド」（build・vet・golangci-lint・test）をすべて実行する。
 
 失敗したら PR を作らずに報告する。dev-cycle から呼ばれた場合は Draft PR にする。
 
 ### 6. PR 本文を生成
 
-`pr-strategy` Skill（`.claude/skills/pr-strategy/SKILL.md`）の「PR 本文の形式」に従う。項目は省略しない。
+`.claude/skills/dev-cycle/templates/pr-body.md` の形式に従う。項目は省略しない（該当しない節は「なし」と書く）。
 
 * dev-cycle から呼ばれた場合は「受け入れ条件」の節に `ac.md` の条件表（ID・条件・判定方法・判定）と修正の回数を載せる。「範囲外の指摘」の節に `ac.md` の範囲外の指摘を、「計画との差」の節に計画ファイルの該当 PR の実績を載せる
 * 推測で内容を補完せず、Git 上で確認できる情報と、呼び出し元から渡されたレビュー結果（見送った Non-blocking・Question）を基に記載する

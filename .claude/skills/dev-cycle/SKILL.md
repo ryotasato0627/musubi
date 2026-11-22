@@ -2,7 +2,7 @@
 name: dev-cycle
 description: 承認済みの計画（docs/plans/<版>.md）の PR を 1 本、開発 → レビューで受け入れ条件を定義 → 修正と再レビュー（計画の修正上限まで）→ PR 作成まで、ユーザーに確認せず止まらずに進める。PR 作成後は人間の判断を待って終了し、`/dev-cycle resume <PR番号>` で判断の反映と確認まで行う。実績は計画に書き戻す。「開発して」「次の PR を進めて」「サイクルを回して」と言われたら使う。
 metadata:
-  deps.requires: "release-plan,pr-strategy,commit-strategy,pr-review,address-pr,adr-writer"
+  deps.requires: "release-plan,commit-strategy,pr-review,address-pr,adr-writer"
 ---
 
 # Dev Cycle
@@ -144,9 +144,7 @@ resume → 7 判断を反映 → 8 再レビュー（人間の指摘を AC に�
    | design（判断が読み取れない） | 実装しない。スレッド（または PR コメント）に選択肢と推奨を返信し、未解決のまま残す。`提案` の ADR は `提案` のまま |
    | question | 回答を返信する（resolve しない） |
    | skip | 理由を返信して resolve する |
-3. **設計判断を ADR に記録する**（`address-pr` の「設計判断の記録（ADR）」）。人間の判断が 1 つでもあれば、メインが `adr-writer` Skill を呼ぶ（Skill ツール。サブエージェントには任せない）
-   - 判断 1 件につき ADR 1 件。状態は人間の判断に合わせて `承認` / `却下` にし、決定者は判断したレビュアー、関連に PR 番号とスレッド ID（またはコメントの URL）を書く
-   - `docs/adr/README.md` と design.md 12 章（`承認` のみ）を更新し、`docs: ADR-NNNN <タイトル>` としてコミットする
+3. **設計判断を ADR に記録する**。人間の判断が 1 つでもあれば、メインが `adr-writer` Skill を呼ぶ（Skill ツール。サブエージェントには任せない）。判断 1 件につき ADR 1 件で、状態は `adr-writer` の「人間の判断と ADR の状態」に従う
    - 判断ごとに `AC-H<n>`「ADR-NNNN が `<状態>` で記録され、README と 12 章に反映されている」を `ac.md` に追加する
 4. 反映する指摘を `ac.md` に `AC-H<n>`（由来はスレッド ID）として追加する。**ここで追加するのは人間の指摘だけ**。人間の指摘は計画の範囲外でも受け入れ条件にしてよい（人間の判断が計画に優先する）。後続の PR の範囲や設計が変わる判断なら、計画を「要見直し」にする
 5. 開発 Agent を修正モードで呼び、追加した受け入れ条件を満たさせる（ADR の記録はメインが済ませているので、開発 Agent は ADR を書かない）

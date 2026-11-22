@@ -1,5 +1,8 @@
 # ADR（Architecture Decision Record）
 
+> 対象読者：設計判断の経緯を追いたい人、判断を覆す前に背景を確かめたい人
+> 次に読むもの：決定済み事項の一覧 → [design.md 12 章](../spec/design.md#12-設計判断の記録)
+
 musubi の設計判断を 1 件ずつ記録する。何を決めたかに加えて、なぜそうしたか、何と比べたかを残す。
 
 - 書き方は `.claude/skills/adr-writer/SKILL.md`、形式は `.claude/skills/adr-writer/templates/adr.md`

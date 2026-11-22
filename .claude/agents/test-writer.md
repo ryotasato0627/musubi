@@ -21,13 +21,7 @@ model: claude-opus-5-5
 2. 対象の実装と、関連する仕様（機能要件、検証ルールの表、設計の該当章）を確認する
 3. 既存テストの書き方（テーブル駆動、ヘルパー、`testdata/` の構成、ゴールデンファイル）を確認し、それに従う
 4. 仕様から導いたテストケースを列挙してから実装する
-5. テストを実行し、結果を報告する
-
-```bash
-go vet ./...
-golangci-lint run
-go test ./...
-```
+5. `.claude/rules/git-workflow.md` の「検証コマンド」（build・vet・golangci-lint・test）をすべて実行し、結果を報告する
 
 ---
 
