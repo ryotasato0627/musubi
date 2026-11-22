@@ -56,7 +56,7 @@ docs/spec/design.md                        # レイヤー構成・CLI・デー�
 ### 4. Implementation Plan
 
 変更前に、変更内容・変更ファイル・理由・影響範囲・必要なテスト（`testdata/` を含む）を整理して示す。
-複数コミットになる場合は `commit-strategy` Skill、複数 PR になる場合は `pr-strategy` Skill に従う。
+複数コミットになる場合は `commit-strategy` Skill に従う。PR の範囲は `task.md`（計画）で決まっているので広げない。
 
 ### 5. Implementation
 

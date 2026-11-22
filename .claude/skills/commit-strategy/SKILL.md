@@ -2,7 +2,7 @@
 name: commit-strategy
 description: 実装を開始する前のコミット計画と、コミットの作成・分割時に使う。複数ファイルにまたがる変更を行うときは、実装前に必ず参照する。
 metadata:
-  deps.related: "pr-strategy"
+  deps.related: "release-plan"
 ---
 
 # Commit Strategy
@@ -27,7 +27,7 @@ AI が大量のコードを生成した場合でも、人間が変更内容を�
 
 実装をすべて終えてから、まとめて 1 つのコミットにしない。
 
-変更が複数の PR に分かれる場合は、先に `pr-strategy` で PR 計画を作成し、PR ごとにコミット計画を作成する。
+PR の範囲は計画（`release-plan` Skill、`docs/plans/<版>.md`）で決まっている。コミット計画はその PR の範囲の中で作る。
 
 ## Rules
 

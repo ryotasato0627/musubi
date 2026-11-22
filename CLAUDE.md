@@ -69,4 +69,4 @@ Scanner → Parser → Path Resolver → Index Builder → Analyzers → Rules �
 - 受け入れ条件は計画の範囲の中だけ。範囲外の指摘は PR 本文と計画の「次の候補」に回す
 - 実績（行数・修正回数・Agent 起動回数）が見込みから外れたら計画を「要見直し」にし、次の `/dev-cycle` は止まって `/release-plan update` を促す
 - `dev-cycle` の実行中は、上の「ユーザーに確認する」「止めて確認する」場面でも止まらない。その部分は実装せず、PR の「人間に判断してほしい点」に選択肢と推奨を書いて回す
-- 関連 Skill：`release-plan`（計画）、`adr-writer`（設計判断を ADR に記録。`承認` の ADR は書き換えず置き換える）、`pr-strategy`（PR の粒度）、`commit-strategy`、`pr-review`、`address-pr`
+- 関連 Skill：`release-plan`（計画）、`adr-writer`（設計判断を ADR に記録。`承認` の ADR は書き換えず置き換える）、`commit-strategy`、`pr-review`、`address-pr`

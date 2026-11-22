@@ -3,7 +3,7 @@ name: address-pr
 description: PR のレビューコメント(未解決スレッド)を読み、分類 → 方針提示(承認待ち) → 修正・コミット → 検証 → push → 返信・resolve まで行う。引数は PR 番号。「レビュー対応して」「PR のコメント見て」と言われたら使う。
 metadata:
   deps.requires: "commit-strategy,pr-review,adr-writer"
-  deps.related: "pr-strategy,dev-cycle"
+  deps.related: "dev-cycle"
 ---
 
 # PR レビュー対応

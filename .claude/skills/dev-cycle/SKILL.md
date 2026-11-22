@@ -2,7 +2,7 @@
 name: dev-cycle
 description: 承認済みの計画（docs/plans/<版>.md）の PR を 1 本、開発 → レビューで受け入れ条件を定義 → 修正と再レビュー（計画の修正上限まで）→ PR 作成まで、ユーザーに確認せず止まらずに進める。PR 作成後は人間の判断を待って終了し、`/dev-cycle resume <PR番号>` で判断の反映と確認まで行う。実績は計画に書き戻す。「開発して」「次の PR を進めて」「サイクルを回して」と言われたら使う。
 metadata:
-  deps.requires: "release-plan,pr-strategy,commit-strategy,pr-review,address-pr,adr-writer"
+  deps.requires: "release-plan,commit-strategy,pr-review,address-pr,adr-writer"
 ---
 
 # Dev Cycle
