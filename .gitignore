@@ -1,7 +1,8 @@
-# claude
-.claude/*
-!.claude/rules
+# claude（rules・skills・agents・hooks・settings.json は共有するのでコミットする）
+.claude/settings.local.json
+.claude/work/
 
-# .emv
+# env（.env.sample だけコミットする）
+.env
 .env.*
-!.emv.sample
+!.env.sample
