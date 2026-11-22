@@ -4,12 +4,13 @@ musubi は、リポジトリ内の Claude Code SKILL（`.claude/skills/`）を�
 
 ## 正とするドキュメント
 
-- 要件：[docs/requirements.md](../../docs/requirements.md)（何を作るか）
-- 設計：[docs/design.md](../../docs/design.md)（どう作るか）
+- 要件：[docs/spec/requirements.md](../../docs/spec/requirements.md)（何を作るか）
+- 設計：[docs/spec/design.md](../../docs/spec/design.md)（どう作るか）
 - 実装がドキュメントと食い違う場合は、勝手にどちらかへ寄せず、ユーザーに確認する。仕様を変えたら該当ドキュメントも同じ変更で更新する
+- 設計判断の詳細（背景・比較した案）は [docs/adr/](../../docs/adr/README.md)。新しい判断は `adr-writer` Skill で ADR に記録する
 - 要件・ルールは ID で参照する：機能 `F-xx`、非機能 `NFR-xx`、検証ルール `E0xx` / `W0xx` / `I0xx`。コミットメッセージ・コメント・テスト名でも ID を使う
 
-## 決定済み事項（design.md 12 章。覆すときは必ず相談する）
+## 決定済み事項（design.md 12 章と承認済みの ADR。覆すときは必ず相談し、新しい ADR を書く）
 
 - 実装言語は Go。バイナリ名・モジュール名・設定フォルダ名は `musubi` / `.musubi/` でそろえる
 - 対象は Claude Code の SKILL のみ。探索ルートは `.claude/skills/` に固定（`--root` はテスト用に 1 つだけ上書き可）。`~/.claude/skills` は扱わない
