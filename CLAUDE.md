@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 musubi は、リポジトリ内の Claude Code SKILL（`.claude/skills/`）を一覧・検証・作成・改名・削除し、SKILL 間の依存関係を解析・可視化する Go 製 CLI。
 
-現時点では実装コードは無く、`docs/requirements.md`（何を作るか）と `docs/design.md`（どう作るか）だけがある。git リポジトリもまだ初期化されていない。最初の実装は v0.1（F-01〜F-07・F-18：`init` `list` `show` `new` `lint` `deps`）で、`go.mod`・`.golangci.yml` もその最初の PR で追加する。リポジトリ構成の予定は design.md 11 章にある。
+現時点では実装コードは無く、`docs/spec/requirements.md`（何を作るか）と `docs/spec/design.md`（どう作るか）、設計判断の記録 `docs/adr/` だけがある。git リポジトリもまだ初期化されていない。最初の実装は v0.1（F-01〜F-07・F-18：`init` `list` `show` `new` `lint` `deps`）で、`go.mod`・`.golangci.yml` もその最初の PR で追加する。リポジトリ構成の予定は design.md 11 章にある。
 
 ## コマンド
 
@@ -48,15 +48,16 @@ Scanner → Parser → Path Resolver → Index Builder → Analyzers → Rules �
 詳細なルールは `.claude/rules/` にあり、`project.md`・`git-workflow.md` は常時、それ以外は該当パスを触るときに読み込まれる（`architecture.md`・`cli.md`・`lint-rules.md`・`output-schema.md`・`gui-server.md`・`testing.md`・`docs.md`）。ここに書いていない決まりはそちらを参照する。特に：
 
 - 実装とドキュメントが食い違ったら勝手に寄せず、ユーザーに確認する。仕様を変えたら docs も同じ変更で更新する
-- 決定済み事項（design.md 12 章）を覆すとき、スコープ外（ネットワークアクセス・`scripts/` 実行・GUI 書き込みなど）に触れるとき、後の段階の機能を先回りしそうなときは止めて確認する
+- 決定済み事項（design.md 12 章・承認済みの ADR）を覆すとき、スコープ外（ネットワークアクセス・`scripts/` 実行・GUI 書き込みなど）に触れるとき、後の段階の機能を先回りしそうなときは止めて確認する
 - Git Flow：`develop` から `feature/*` / `fix/*` を切り、PR の既定マージ先は `develop`。`main` / `develop` へ直接コミットしない、force push しない
 
 ## 開発サイクル
 
-実装は `dev-cycle` Skill で 1 PR ずつ進める。人間が判断するのは PR のレビューだけで、それ以外は止まらずに進める。
+実装は、承認済みの計画にある PR だけを `dev-cycle` Skill で 1 本ずつ進める（いきなり実装しない。作業量とコストを計画で縛る）。人間が判断するのは計画の承認と PR のレビューだけで、それ以外は止まらずに進める。
 
 ```
-/dev-cycle <タスク>        0 準備 → 1 開発 → 2 初回レビュー（受け入れ条件を定義）→ [3 修正 → 4 再レビュー]×最大3回 → 5 PR 作成 → 終了
+/release-plan v0.1         （plan モード）未決定事項の解消 → PR 分割 → 承認 → docs/plans/v0.1.md に保存
+/dev-cycle [PR-n]          0 計画から PR を選ぶ → 1 開発 → 2 初回レビュー（計画の範囲で受け入れ条件を定義）→ [3 修正 → 4 再レビュー]×修正上限 → 5 PR 作成・実績を計画に書き戻す → 終了
 （人間が PR をレビュー）
 /dev-cycle resume <PR番号>  7 判断を反映 → 8 再レビュー → push・返信 → 終了
 ```
@@ -64,6 +65,8 @@ Scanner → Parser → Path Resolver → Index Builder → Analyzers → Rules �
 - 進行役はメインのセッション（サブエージェントは別のサブエージェントを呼べない）。各工程は `.claude/agents/` の `go-dev` / `web-dev`（開発・修正）、`test-writer`、`reviewer`（受け入れ条件の定義と判定）、`pr-creator` が担当する
 - 工程間の受け渡しは `.claude/work/<ブランチ>/`（`task.md`・`ac.md`・`review-<N>.md` など。コミットしない）
 - **reviewer は毎回新しいインスタンスで起動し、開発のコンテキストを渡さない**（SendMessage での継続・fork は使わない。プロンプトはモード・作業ディレクトリ・ブランチ・round だけ。`dev-report` / `fix-report` / 会話の要約は渡さない）。reviewer はファイルを書かず、返した `ac.md` / レビューをメインが保存する
-- 受け入れ条件が 3 回で満たせない、仕様の判断が要る、コンフリクトが解消できない場合も止まらず、Draft PR と「人間に判断してほしい点」に回す
+- 受け入れ条件が修正上限で満たせない、仕様の判断が要る、コンフリクトが解消できない場合も止まらず、Draft PR と「人間に判断してほしい点」に回す
+- 受け入れ条件は計画の範囲の中だけ。範囲外の指摘は PR 本文と計画の「次の候補」に回す
+- 実績（行数・修正回数・Agent 起動回数）が見込みから外れたら計画を「要見直し」にし、次の `/dev-cycle` は止まって `/release-plan update` を促す
 - `dev-cycle` の実行中は、上の「ユーザーに確認する」「止めて確認する」場面でも止まらない。その部分は実装せず、PR の「人間に判断してほしい点」に選択肢と推奨を書いて回す
-- 関連 Skill：`pr-strategy`（PR の粒度と計画）、`commit-strategy`、`pr-review`、`address-pr`
+- 関連 Skill：`release-plan`（計画）、`adr-writer`（設計判断を ADR に記録。`承認` の ADR は書き換えず置き換える）、`pr-strategy`（PR の粒度）、`commit-strategy`、`pr-review`、`address-pr`
