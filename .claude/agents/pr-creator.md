@@ -70,12 +70,7 @@ git merge-tree --write-tree origin/<base> HEAD
 
 ### 5. 検証を実行
 
-```bash
-go build ./...
-go vet ./...
-golangci-lint run
-go test ./...
-```
+`.claude/rules/git-workflow.md` の「検証コマンド」（build・vet・golangci-lint・test）をすべて実行する。
 
 失敗したら PR を作らずに報告する。dev-cycle から呼ばれた場合は Draft PR にする。
 

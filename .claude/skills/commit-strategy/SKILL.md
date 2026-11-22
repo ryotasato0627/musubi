@@ -64,16 +64,7 @@ PR の範囲は計画（`release-plan` Skill、`docs/plans/<版>.md`）で決ま
 
 ### 4. 各コミットでビルドとテストが通る状態を保つ
 
-どのコミットをチェックアウトしても、次が通る状態にする。
-
-```bash
-go build ./...
-go vet ./...
-golangci-lint run
-go test ./...
-```
-
-`golangci-lint` は必須（`.claude/rules/git-workflow.md`）。`web/` を変更した場合は、そのパッケージのビルドとテストも実行する。
+どのコミットをチェックアウトしても、`.claude/rules/git-workflow.md` の「検証コマンド」（build・vet・golangci-lint・test）が通る状態にする。`web/` を変更した場合は、そのパッケージのビルドとテストも実行する。
 
 分割によって途中のコミットでビルドが壊れる場合は、分割の単位か順序を見直す。
 
