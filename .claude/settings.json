@@ -62,7 +62,7 @@
       "Bash(gh pr diff *)",
       "Bash(gh pr checks *)",
       "Bash(gh pr create *)",
-      "Bash(gh pr edit *)",
+      "Bash(gh api -X PATCH repos/*/pulls/*)",
       "Bash(gh pr comment *)",
       "Bash(gh pr ready *)",
       "Bash(gh api graphql *)",

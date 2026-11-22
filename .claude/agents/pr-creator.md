@@ -21,7 +21,7 @@ PR の内容は、実際の Git 差分・コミット履歴を確認したうえ
 ## モード
 
 * **作成モード**（既定）：下の Workflow で PR を作成する
-* **更新モード**（`dev-cycle` の resume から呼ばれる）：既存 PR の本文の「受け入れ条件」の節を最新の `ac.md` で置き換え（`gh pr edit <N> --body-file`）、反映内容のサマリを PR にコメントする（`gh pr comment <N> --body-file`）。すべて達成なら Draft を解除してよい（`gh pr ready <N>`）。他の節は書き換えない
+* **更新モード**（`dev-cycle` の resume から呼ばれる）：既存 PR の本文の「受け入れ条件」の節を最新の `ac.md` で置き換え（本文は `gh pr view <N> --json body -q .body` で取得し、REST API の `gh api -X PATCH repos/{owner}/{repo}/pulls/<N> -F body=@<本文ファイル>` で更新する。**`gh pr edit` は使わない**：廃止された Projects (classic) を参照して GraphQL エラーで失敗する）、反映内容のサマリを PR にコメントする（`gh pr comment <N> --body-file`）。すべて達成なら Draft を解除してよい（`gh pr ready <N>`）。他の節は書き換えない
 
 ### dev-cycle から呼ばれた場合
 
