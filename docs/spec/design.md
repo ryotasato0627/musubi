@@ -467,3 +467,8 @@ your-repo/
 | ブランチ運用 | Git Flow（`main` / `develop` / `feature/*` / `fix/*` / `release/*` / `hotfix/*`）。PR の既定のマージ先は `develop` だが必須ではなく、マージが完了できることを確認する |
 | 静的解析 | `golangci-lint` を必須にする（設定は `.golangci.yml`） |
 | 設計判断の記録方法 | ADR（`docs/adr/`）を正とし、この表は索引にする（[ADR-0001](../adr/0001-record-decisions-as-adr.md)） |
+| YAML ライブラリ | `github.com/goccy/go-yaml`（[ADR-0002](../adr/0002-yaml-library.md)） |
+| TOML ライブラリ | `github.com/BurntSushi/toml`。未知キーは終了コード 2（[ADR-0003](../adr/0003-toml-library.md)） |
+| Go のバージョン | 最新の安定版。CI は go.mod に合わせる（[ADR-0004](../adr/0004-go-version.md)） |
+| CI | GitHub Actions、PR ごとに ubuntu / macos / windows で build・vet・golangci-lint・test・govulncheck・`go mod tidy` 差分確認（[ADR-0005](../adr/0005-ci-github-actions.md)） |
+| 依存方向の強制 | golangci-lint の depguard でレイヤー間の import を制限（[ADR-0006](../adr/0006-depguard-layer-rules.md)） |

@@ -9,3 +9,8 @@ musubi の設計判断を 1 件ずつ記録する。何を決めたかに加え�
 | 番号 | タイトル | 状態 | 日付 |
 | --- | --- | --- | --- |
 | [0001](0001-record-decisions-as-adr.md) | 設計判断を ADR で記録する | 承認 | 2026-11-22 |
+| [0002](0002-yaml-library.md) | frontmatter の YAML 解析に goccy/go-yaml を使う | 承認 | 2026-11-22 |
+| [0003](0003-toml-library.md) | 設定ファイルの TOML 解析に BurntSushi/toml を使う | 承認 | 2026-11-22 |
+| [0004](0004-go-version.md) | Go は最新の安定版を使う | 承認 | 2026-11-22 |
+| [0005](0005-ci-github-actions.md) | CI は GitHub Actions で 3 OS を検証する | 承認 | 2026-11-22 |
+| [0006](0006-depguard-layer-rules.md) | レイヤー間の依存方向を depguard で強制する | 承認 | 2026-11-22 |
