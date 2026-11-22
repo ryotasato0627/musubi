@@ -1,0 +1,7 @@
+# claude
+.claude/*
+!.claude/rules
+
+# .emv
+.env.*
+!.emv.sample
