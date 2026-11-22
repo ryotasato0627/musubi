@@ -1,0 +1,120 @@
+# golangci-lint v2 の設定（ADR-0005、ADR-0006）
+version: "2"
+
+linters:
+  default: standard
+  enable:
+    - depguard
+  settings:
+    depguard:
+      # design.md 1 章のレイヤーの流れ
+      #   Scanner → Parser → Path Resolver → Index Builder → Analyzers → Rules → Presenters（export・server・cli）
+      # に逆らう import を禁止する（ADR-0006）。下流は上流を import してよいが、上流は下流を import しない。
+      # パッケージを追加・移動したらこの設定も更新する。
+      rules:
+        presenters-are-outermost:
+          list-mode: lax
+          files:
+            - "**/internal/**"
+            - "!**/internal/cli/**"
+          deny:
+            - pkg: github.com/ryotasato0627/musubi/internal/cli
+              desc: cli は最も外側の層。他のパッケージから import しない（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/cmd
+              desc: cmd はエントリポイント。import しない
+        core:
+          list-mode: lax
+          files:
+            - "**/internal/core/**"
+          deny:
+            - pkg: github.com/ryotasato0627/musubi/internal/analyzers
+              desc: core は analyzers より上流（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/internal/rules
+              desc: core は rules より上流。診断は rules だけで作る（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/internal/export
+              desc: core は presenter に依存しない（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/internal/server
+              desc: core は presenter に依存しない（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/internal/adapters
+              desc: Claude Code 固有の情報はコアから直接参照しない（design.md 10 章）
+        core-config-and-graph-are-leaves:
+          list-mode: lax
+          files:
+            - "**/internal/core/config/**"
+            - "**/internal/core/graph/**"
+          deny:
+            - pkg: github.com/ryotasato0627/musubi/internal/core/scanner
+              desc: config と graph は他の core パッケージに依存しない
+            - pkg: github.com/ryotasato0627/musubi/internal/core/parser
+              desc: config と graph は他の core パッケージに依存しない
+            - pkg: github.com/ryotasato0627/musubi/internal/core/resolver
+              desc: config と graph は他の core パッケージに依存しない
+            - pkg: github.com/ryotasato0627/musubi/internal/core/index
+              desc: config と graph は他の core パッケージに依存しない
+        core-scanner:
+          list-mode: lax
+          files:
+            - "**/internal/core/scanner/**"
+          deny:
+            - pkg: github.com/ryotasato0627/musubi/internal/core/parser
+              desc: Scanner は Parser より上流（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/internal/core/resolver
+              desc: Scanner は Path Resolver より上流（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/internal/core/index
+              desc: Scanner は Index Builder より上流（design.md 1 章）
+        core-parser:
+          list-mode: lax
+          files:
+            - "**/internal/core/parser/**"
+          deny:
+            - pkg: github.com/ryotasato0627/musubi/internal/core/resolver
+              desc: Parser はパスを解決しない。Path Resolver より上流（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/internal/core/index
+              desc: Parser は Index Builder より上流（design.md 1 章）
+        core-resolver:
+          list-mode: lax
+          files:
+            - "**/internal/core/resolver/**"
+          deny:
+            - pkg: github.com/ryotasato0627/musubi/internal/core/index
+              desc: Path Resolver は Index Builder より上流（design.md 1 章）
+        analyzers:
+          list-mode: lax
+          files:
+            - "**/internal/analyzers/**"
+          deny:
+            - pkg: github.com/ryotasato0627/musubi/internal/rules
+              desc: Analyzers は診断を作らない。Rules より上流（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/internal/export
+              desc: Analyzers は presenter に依存しない（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/internal/server
+              desc: Analyzers は presenter に依存しない（design.md 1 章）
+        rules:
+          list-mode: lax
+          files:
+            - "**/internal/rules/**"
+          deny:
+            - pkg: github.com/ryotasato0627/musubi/internal/export
+              desc: Rules は presenter に依存しない（design.md 1 章）
+            - pkg: github.com/ryotasato0627/musubi/internal/server
+              desc: Rules は presenter に依存しない（design.md 1 章）
+        export:
+          list-mode: lax
+          files:
+            - "**/internal/export/**"
+          deny:
+            - pkg: github.com/ryotasato0627/musubi/internal/server
+              desc: export は server に依存しない
+        adapters:
+          list-mode: lax
+          files:
+            - "**/internal/adapters/**"
+          deny:
+            - pkg: github.com/ryotasato0627/musubi/internal/export
+              desc: adapters は presenter に依存しない
+            - pkg: github.com/ryotasato0627/musubi/internal/server
+              desc: adapters は presenter に依存しない
+
+formatters:
+  enable:
+    - gofmt
