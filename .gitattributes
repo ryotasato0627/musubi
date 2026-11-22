@@ -1,0 +1,2 @@
+# Windows の CI でも gofmt が通るよう、テキストファイルは LF でチェックアウトする
+* text=auto eol=lf
